@@ -56,7 +56,14 @@ if torch.cuda.is_available():
 #     device = "mps"
 else:
     device = "cpu"
-model=cnhubert.get_model()
+
+# Initialize the correct HuBERT model based on the language
+if "japanese" in cnhubert.cnhubert_base_path.lower():
+    from feature_extractor.cnhubert import get_jmodel
+    model = get_jmodel()
+else:
+    model = cnhubert.get_model()
+
 # is_half=False
 if(is_half==True):
     model=model.half().to(device)

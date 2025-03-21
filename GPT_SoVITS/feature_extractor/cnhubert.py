@@ -42,6 +42,13 @@ class CNHubert(nn.Module):
         return feats
 
 
+# Added JHubert class while keeping CNHubert for backward compatibility
+class JHubert(CNHubert):
+    # Inherits all functionality from CNHubert since the model interface is the same
+    # This class exists for semantic clarity when using Japanese models
+    pass
+
+
 # class CNHubertLarge(nn.Module):
 #     def __init__(self):
 #         super().__init__()
@@ -75,6 +82,13 @@ class CNHubert(nn.Module):
 
 def get_model():
     model = CNHubert()
+    model.eval()
+    return model
+
+
+# Add function to get Japanese HuBERT model
+def get_jmodel():
+    model = JHubert()
     model.eval()
     return model
 

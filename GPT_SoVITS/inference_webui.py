@@ -194,7 +194,13 @@ class DictToAttrRecursive(dict):
             raise AttributeError(f"Attribute {item} not found")
 
 
-ssl_model = cnhubert.get_model()
+# Initialize the correct HuBERT model based on the language
+if "japanese" in cnhubert_base_path.lower():
+    from feature_extractor.cnhubert import get_jmodel
+    ssl_model = get_jmodel()
+else:
+    ssl_model = cnhubert.get_model()
+    
 if is_half == True:
     ssl_model = ssl_model.half().to(device)
 else:
@@ -374,7 +380,7 @@ def clean_text_inf(text, language, version):
 dtype=torch.float16 if is_half == True else torch.float32
 def get_bert_inf(phones, word2ph, norm_text, language):
     language=language.replace("all_","")
-    if language == "zh":
+    if language in ["zh", "ja"]:  # Added "ja" to use BERT features for Japanese
         bert = get_bert_feature(norm_text, word2ph).to(device)#.to(dtype)
     else:
         bert = torch.zeros(
@@ -407,6 +413,10 @@ def get_phones_and_bert(text,language,version,final=False):
             else:
                 phones, word2ph, norm_text = clean_text_inf(formattext, language, version)
                 bert = get_bert_feature(norm_text, word2ph).to(device)
+        elif language == "all_ja":
+            # Handle Japanese text - always use Japanese text processing
+            phones, word2ph, norm_text = clean_text_inf(formattext, language, version)
+            bert = get_bert_feature(norm_text, word2ph).to(device)
         elif language == "all_yue" and re.search(r'[A-Za-z]', formattext):
                 formattext = re.sub(r'[a-z]', lambda x: x.group(0).upper(), formattext)
                 formattext = chinese.mix_text_normalize(formattext)

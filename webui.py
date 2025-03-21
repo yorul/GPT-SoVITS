@@ -991,7 +991,7 @@ with gr.Blocks(title="GPT-SoVITS WebUI") as app:
                     with gr.Row():
                         gpu_numbers1a = gr.Textbox(label=i18n("GPU卡号以-分割，每个卡号一个进程"),value="%s-%s"%(gpus,gpus),interactive=True)
                     with gr.Row():
-                        bert_pretrained_dir = gr.Textbox(label=i18n("预训练中文BERT模型路径"),value="GPT_SoVITS/pretrained_models/chinese-roberta-wwm-ext-large",interactive=False,lines=2)
+                        bert_pretrained_dir = gr.Textbox(label=i18n("预训练BERT模型路径"),value="GPT_SoVITS/pretrained_models/japanese-roberta-wwm-ext-large",interactive=False,lines=2)
                     with gr.Row():
                         button1a_open = gr.Button(value=process_info(process_name_1a, "open"),variant="primary",visible=True)
                         button1a_close = gr.Button(value=process_info(process_name_1a, "close"),variant="primary",visible=False)
@@ -1003,7 +1003,7 @@ with gr.Blocks(title="GPT-SoVITS WebUI") as app:
                     with gr.Row():
                         gpu_numbers1Ba = gr.Textbox(label=i18n("GPU卡号以-分割，每个卡号一个进程"),value="%s-%s"%(gpus,gpus),interactive=True)
                     with gr.Row():
-                        cnhubert_base_dir = gr.Textbox(label=i18n("预训练SSL模型路径"),value="GPT_SoVITS/pretrained_models/chinese-hubert-base",interactive=False,lines=2)
+                        cnhubert_base_dir = gr.Textbox(label=i18n("预训练SSL模型路径"),value="GPT_SoVITS/pretrained_models/japanese-hubert-base",interactive=False,lines=2)
                     with gr.Row():
                         button1b_open = gr.Button(value=process_info(process_name_1b, "open"),variant="primary",visible=True)
                         button1b_close = gr.Button(value=process_info(process_name_1b, "close"),variant="primary",visible=False)
