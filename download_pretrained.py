@@ -33,10 +33,10 @@ MODELS = {
     "japanese-hubert-base/tokenizer.json": "https://huggingface.co/rinna/japanese-hubert-base/resolve/main/tokenizer.json",
 
     # Japanese BERT model
-    "japanese-roberta-wwm-ext-large/config.json": "https://huggingface.co/tohoku-nlp/bert-base-japanese-v3/resolve/main/config.json",
-    "japanese-roberta-wwm-ext-large/pytorch_model.bin": "https://huggingface.co/tohoku-nlp/bert-base-japanese-v3/resolve/main/pytorch_model.bin",
-    "japanese-roberta-wwm-ext-large/tokenizer_config.json": "https://huggingface.co/tohoku-nlp/bert-base-japanese-v3/resolve/main/tokenizer_config.json",
-    "japanese-roberta-wwm-ext-large/vocab.txt": "https://huggingface.co/tohoku-nlp/bert-base-japanese-v3/resolve/main/vocab.txt"
+    "japanese-roberta-wwm-ext-large/config.json": "https://huggingface.co/tohoku-nlp/bert-large-japanese-v2/resolve/main/config.json",
+    "japanese-roberta-wwm-ext-large/pytorch_model.bin": "https://huggingface.co/tohoku-nlp/bert-large-japanese-v2/resolve/main/pytorch_model.bin",
+    "japanese-roberta-wwm-ext-large/tokenizer_config.json": "https://huggingface.co/tohoku-nlp/bert-large-japanese-v2/resolve/main/tokenizer_config.json",
+    "japanese-roberta-wwm-ext-large/vocab.txt": "https://huggingface.co/tohoku-nlp/bert-large-japanese-v2/resolve/main/vocab.txt"
 }
 
 G2PW_URL = "https://paddlespeech.bj.bcebos.com/Parakeet/released_models/g2p/G2PWModel_1.1.zip"
