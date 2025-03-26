@@ -1,4 +1,3 @@
-
 #!/usr/bin/env python3
 """
 Test script for the Deepgram Mock API. This script tests both REST and WebSocket endpoints.

@@ -18,3 +18,13 @@ TEMP
 weight.json
 ffmpeg*
 ffprobe*
+*.wav
+*.mp3
+*.aac
+*.ogg
+*.m4a
+*.flac
+*.webm
+GPT_SoVITS/pretrained_models/
+GPT_SoVITS/text/ja_userdic/userdict.md5
+GPT_SoVITS/text/ja_userdic/user.dict

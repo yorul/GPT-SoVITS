@@ -1,20 +1,3 @@
-"""
-# Deepgram Mock API for GPT-SoVITS (Japanese Only)
-
-This module creates a simplified mock of the Deepgram TTS API that forwards requests to the 
-GPT-SoVITS API backend. It mimics both the REST and WebSocket interfaces that Deepgram provides,
-but only supports Japanese language.
-
-## Deepgram TTS API Endpoints:
-- REST API: POST /v1/speak
-- WebSocket API: wss://api.deepgram.com/v1/speak
-
-## Configuration:
-- Set the GPT_SOVITS_API_URL environment variable to point to your GPT-SoVITS API server
-- Set the API_KEY environment variable to control API key authentication
-- Configure voice mappings in voice_mapping.json
-"""
-
 import os
 import json
 import time
@@ -109,7 +92,7 @@ def get_voice_reference(voice: str) -> str:
 def get_language(language: str) -> str:
     """Map Deepgram language to GPT-SoVITS language."""
     if not language:
-        return "ja"  # Default to Japanese if language is None or empty
+        return "ja"
     
     # First try exact match
     if language in LANGUAGE_MAPPING:
