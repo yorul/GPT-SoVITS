@@ -1,10 +1,11 @@
-
 import os
 import sys
 import traceback
 from typing import Generator
 
+# Get the current working directory
 now_dir = os.getcwd()
+# Add the current directory and the GPT_SoVITS subdirectory to the Python path
 sys.path.append(now_dir)
 sys.path.append("%s/GPT_SoVITS" % (now_dir))
 
@@ -19,40 +20,67 @@ from fastapi.responses import StreamingResponse, JSONResponse
 from fastapi import FastAPI, UploadFile, File
 import uvicorn
 from io import BytesIO
-from GPT_SoVITS.tools.i18n.i18n import I18nAuto
-from GPT_SoVITS.TTS_infer_pack.TTS import TTS, TTS_Config
-from GPT_SoVITS.TTS_infer_pack.text_segmentation_method import get_method_names as get_cut_method_names
+# Import necessary components from the GPT_SoVITS library
+from GPT_SoVITS.tools.i18n.i18n import I18nAuto # Internationalization helper (though likely less relevant now)
+from GPT_SoVITS.TTS_infer_pack.TTS import TTS, TTS_Config # Core TTS pipeline and configuration
+from GPT_SoVITS.TTS_infer_pack.text_segmentation_method import get_method_names as get_cut_method_names # Text splitting methods
 from fastapi.responses import StreamingResponse
-from pydantic import BaseModel
-# print(sys.path)
+from pydantic import BaseModel # For defining request body structure
+
+# Initialize internationalization (likely less needed for Japanese-only)
 i18n = I18nAuto()
+# Get available text splitting method names
 cut_method_names = get_cut_method_names()
 
-parser = argparse.ArgumentParser(description="GPT-SoVITS api")
-parser.add_argument("-c", "--tts_config", type=str, default="GPT_SoVITS/configs/tts_infer.yaml", help="tts_infer路径")
-parser.add_argument("-a", "--bind_addr", type=str, default="127.0.0.1", help="default: 127.0.0.1")
-parser.add_argument("-p", "--port", type=int, default="9880", help="default: 9880")
+# --- Argument Parsing ---
+parser = argparse.ArgumentParser(description="GPT-SoVITS API")
+# Argument for the TTS inference configuration file path
+parser.add_argument("-c", "--tts_config", type=str, default="GPT_SoVITS/configs/tts_infer.yaml", help="Path to tts_infer.yaml")
+# Argument for the network address to bind the API server to
+parser.add_argument("-a", "--bind_addr", type=str, default="127.0.0.1", help="Address to bind the API server (default: 127.0.0.1)")
+# Argument for the port number to run the API server on
+parser.add_argument("-p", "--port", type=int, default="9880", help="Port to run the API server (default: 9880)")
 args = parser.parse_args()
+
 config_path = args.tts_config
-# device = args.device
 port = args.port
 host = args.bind_addr
+# Store original command line arguments for potential restart
 argv = sys.argv
 
+# Use default config path if none is provided
 if config_path in [None, ""]:
     config_path = "GPT-SoVITS/configs/tts_infer.yaml"
 
+# --- TTS Initialization ---
+# Load TTS configuration from the specified YAML file
 tts_config = TTS_Config(config_path)
-print(tts_config)
+print("Loaded TTS Config:", tts_config)
+# Initialize the main TTS pipeline with the loaded configuration
 tts_pipeline = TTS(tts_config)
 
+# --- FastAPI App Initialization ---
 APP = FastAPI()
+
+# --- Request Body Model ---
+# Defines the structure and default values for POST requests to /tts
 class TTS_Request(BaseModel):
+    text: str = None # The text to be synthesized (required in practice)
+    text_lang: str = "ja" # Language of the input text (defaulted and enforced as 'ja')
+    ref_audio_path: str = None # Path to the reference audio for voice cloning (required)
+    aux_ref_audio_paths: list = None # Optional: List of auxiliary reference audios for multi-speaker (not typically used)
+    prompt_lang: str = "ja" # Language of the reference audio prompt (defaulted and enforced as 'ja')
+    prompt_text: str = "" # Optional: Text prompt associated with the reference audio
+    top_k:int = 5 # Parameter for nucleus sampling (sampling strategy)
+    top_p:float = 1 # Parameter for nucleus sampling (sampling strategy)
+    temperature:float = 1 # Controls randomness in sampling (higher = more random)
+    text_split_method:str = "cut5" # Method for splitting long text (e.g., "cut5" splits by punctuation)
+    batch_size:int = 1 # Batch size for inference (usually 1 for real-time)
     text: str = None
-    text_lang: str = None
+    text_lang: str = "ja"
     ref_audio_path: str = None
     aux_ref_audio_paths: list = None
-    prompt_lang: str = None
+    prompt_lang: str = "ja"
     prompt_text: str = ""
     top_k:int = 5
     top_p:float = 1
@@ -156,12 +184,12 @@ def check_params(req:dict):
         return JSONResponse(status_code=400, content={"message": "text is required"})
     if (text_lang in [None, ""]) :
         return JSONResponse(status_code=400, content={"message": "text_lang is required"})
-    elif text_lang.lower() not in tts_config.languages:
-        return JSONResponse(status_code=400, content={"message": f"text_lang: {text_lang} is not supported in version {tts_config.version}"})
+    elif text_lang.lower() != "ja":
+        return JSONResponse(status_code=400, content={"message": f"text_lang: {text_lang} is not supported. Only 'ja' is supported."})
     if (prompt_lang in [None, ""]) :
         return JSONResponse(status_code=400, content={"message": "prompt_lang is required"})
-    elif prompt_lang.lower() not in tts_config.languages:
-        return JSONResponse(status_code=400, content={"message": f"prompt_lang: {prompt_lang} is not supported in version {tts_config.version}"})
+    elif prompt_lang.lower() != "ja":
+        return JSONResponse(status_code=400, content={"message": f"prompt_lang: {prompt_lang} is not supported. Only 'ja' is supported."})
     if media_type not in ["wav", "raw", "ogg", "aac"]:
         return JSONResponse(status_code=400, content={"message": f"media_type: {media_type} is not supported"})
     elif media_type == "ogg" and  not streaming_mode:
@@ -251,10 +279,10 @@ async def control(command: str = None):
 @APP.get("/tts")
 async def tts_get_endpoint(
                         text: str = None,
-                        text_lang: str = None,
+                        text_lang: str = "ja",
                         ref_audio_path: str = None,
                         aux_ref_audio_paths:list = None,
-                        prompt_lang: str = None,
+                        prompt_lang: str = "ja",
                         prompt_text: str = "",
                         top_k:int = 5,
                         top_p:float = 1,
