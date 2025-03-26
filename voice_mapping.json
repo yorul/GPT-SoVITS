@@ -1,0 +1,39 @@
+{
+    "voices": {
+        "nova": {
+            "ref_audio_path": "2ec3a22a-78e7-4258-b2a9-c245fd15a168_6_14490ms-19990ms.mp3",
+            "description": "A clear, feminine voice with Japanese accent",
+            "prompt_text": "そこでですね、東京電力地域のお客様限定で電気代の削減のご案内をしておりまして"
+        },
+        "aura": {
+            "ref_audio_path": "2ec3a22a-78e7-4258-b2a9-c245fd15a168_6_14490ms-19990ms.mp3",
+            "description": "A warm, feminine voice with Japanese accent",
+            "prompt_text": "そこでですね、東京電力地域のお客様限定で電気代の削減のご案内をしておりまして"
+        },
+        "stella": {
+            "ref_audio_path": "2ec3a22a-78e7-4258-b2a9-c245fd15a168_6_14490ms-19990ms.mp3",
+            "description": "A friendly, feminine voice with Japanese accent",
+            "prompt_text": "そこでですね、東京電力地域のお客様限定で電気代の削減のご案内をしておりまして"
+        },
+        "onyx": {
+            "ref_audio_path": "2ec3a22a-78e7-4258-b2a9-c245fd15a168_6_14490ms-19990ms.mp3",
+            "description": "A deep, masculine voice with Japanese accent",
+            "prompt_text": "そこでですね、東京電力地域のお客様限定で電気代の削減のご案内をしておりまして"
+        },
+        "shimmer": {
+            "ref_audio_path": "2ec3a22a-78e7-4258-b2a9-c245fd15a168_6_14490ms-19990ms.mp3",
+            "description": "A bright, feminine voice with Japanese accent",
+            "prompt_text": "そこでですね、東京電力地域のお客様限定で電気代の削減のご案内をしておりまして"
+        },
+        "default": {
+            "ref_audio_path": "2ec3a22a-78e7-4258-b2a9-c245fd15a168_6_14490ms-19990ms.mp3",
+            "description": "Default voice used when no matching voice is found",
+            "prompt_text": "そこでですね、東京電力地域のお客様限定で電気代の削減のご案内をしておりまして"
+        }
+    },
+    "languages": {
+        "ja": "ja",
+        "ja-JP": "ja",
+        "auto": "auto"
+    }
+} 
